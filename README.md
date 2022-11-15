@@ -21,14 +21,15 @@ docker context use quark
 - Run benchmarks:
 
 ```
-./benchmark.sh
+./benchmark.sh <COUNT>
 ```
 
 - Results:
 
 ```
-benchmark_quark_nodejs 21.383(0.093)
-benchmark_docker_nodejs 20.986(0.043)
+name                    min     max     avg     sd
+benchmark_docker_nodejs 20.915  21.058  20.978  0.041
+benchmark_quark_nodejs  21.363  21.535  21.434  0.049
 ```
 
 [Quark]: https://github.com/QuarkContainer/Quark
