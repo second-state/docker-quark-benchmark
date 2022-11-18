@@ -49,8 +49,8 @@ function show_result {
 rm -rf "$LOGDIR"
 mkdir -p "$LOGDIR"
 
-benchmark_quark_nodejs
 benchmark_docker_nodejs
+benchmark_quark_nodejs
 
 echo -e "name\t\t\tmin\tmax\tavg\tsd"
 show_result benchmark_docker_nodejs
