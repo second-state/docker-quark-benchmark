@@ -24,7 +24,7 @@ docker context use quark
 ./benchmark.sh <COUNT>
 ```
 
-- Results:
+- Results (sec, lower is better):
 
 ```
 name                    min     max     avg     sd
@@ -67,7 +67,7 @@ Crypto: 46674
 Score (version 7): 46674
 ```
 
-- Run all the benchmarks:
+- Run all the benchmarks (score, higher is better):
 
 ```
 $ cd nodejs/v8-v7/
