@@ -35,6 +35,17 @@ function benchmark_quark_nodejs {
     docker rmi "$image_name" >&/dev/null
 }
 
+function benchmark_gvisor_nodejs {
+    local image_name=$FUNCNAME
+    local logfile="$LOGDIR/$image_name"
+    rm -f "$logfile"
+    docker build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
+    for i in $(seq 1 $COUNT); do
+        time docker run --rm --runtime runsc "$image_name" >&/dev/null
+    done 2>"$logfile"
+    docker rmi "$image_name" >&/dev/null
+}
+
 function show_result {
     local name="$1"
     local logfile="$LOGDIR/$1"
@@ -51,7 +62,9 @@ mkdir -p "$LOGDIR"
 
 benchmark_docker_nodejs
 benchmark_quark_nodejs
+benchmark_gvisor_nodejs
 
 echo -e "name\t\t\tmin\tmax\tavg\tsd"
 show_result benchmark_docker_nodejs
 show_result benchmark_quark_nodejs
+show_result benchmark_gvisor_nodejs
