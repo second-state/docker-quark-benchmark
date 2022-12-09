@@ -1,18 +1,20 @@
 ## Usage
 
 - Install [Quark][] and [gVisor][].
-- Start `dockerd` with `quark` and `runsc` runtime:
+- Install [Docker buildx plugin][buildx]
+- Use [wasmedge branch of moby](https://github.com/CaptainVincent/moby/tree/wasmedge) for dockerd
+- Start `dockerd` with `quark` and `runsc` runtime and `config/daemon.json` config:
 
 ```
 sudo dockerd -D -H unix:///tmp/dockerd/docker.sock \
     --data-root /tmp/dockerd/root \
     --pidfile /tmp/dockerd/docker.pid \
+    --config-file config/daemon.json \
     --add-runtime quark=/usr/local/bin/quark \
-    --add-runtime quark_d=/usr/local/bin/quark_d \
     --add-runtime runsc=/usr/local/bin/runsc
 ```
 
-- Create and use docker context for Quark:
+- Create and use docker context:
 
 ```
 docker context create benchmark --docker host=unix:///tmp/dockerd/docker.sock
@@ -28,11 +30,26 @@ docker context use benchmark
 - Results (sec, lower is better):
 
 ```
-name                    min     max     avg     sd
-benchmark_docker_nodejs 20.854  21.268  20.930  0.058
-benchmark_quark_nodejs  21.307  21.805  21.406  0.076
-benchmark_gvisor_nodejs 21.332  21.927  21.474  0.091
+name                            min     max     avg     sd
+benchmark_runc_nodejs           20.871  21.470  20.999  0.165
+benchmark_quark_nodejs          21.388  21.483  21.427  0.028
+benchmark_gvisor_nodejs         21.428  21.599  21.530  0.062
+benchmark_wasmedge_quickjs      55.509  60.114  56.550  1.240
 ```
+
+## Environments
+
+- **benchmark_runc_nodejs**
+    - Use docker default runtime (runc) to start a `node:16` container to run `v8-v7` benchmark.
+- **benchmark_quark_nodejs**
+    - Use [Quark][] runtime to start a `node:16` container to run `v8-v7` benchmark.
+- **benchmark_gvisor_nodejs**
+    - Use [gVisor][] runtime to start a `node:16` container to run `v8-v7` benchmark.
+- **benchmark_wasmedge_quickjs**
+    - Use `wasmedge_quickjs.wasm` from [wasmedge-quickjs][].
+    - Compile `wasmedge_quickjs.wasm` to `wasmedge_quickjs.wasm.so` using `wasmedgec`.
+    - Use [second-state/runwasi][runwasi] WasmEdge runtime to start a container,
+      which uses `wasmedge_quickjs.wasm.so` as a javascript engine to run `v8-v7` benchmark.
 
 ## Node.js Benchmarks
 
@@ -89,4 +106,7 @@ Score (version 7): 43096
 
 [Quark]: https://github.com/QuarkContainer/Quark
 [gVisor]: https://github.com/google/gvisor
+[buildx]: https://github.com/docker/buildx
 [v8-v7]: https://github.com/mozilla/arewefastyet/tree/master/benchmarks/v8-v7
+[wasmedge-quickjs]: https://github.com/second-state/wasmedge-quickjs
+[runwasi]: https://github.com/second-state/runwasi.git
