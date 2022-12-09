@@ -428,7 +428,7 @@ function am4(i,x,w,j,c,n) {
 // IE7 does 9% better with am3/28 than with am4/26.
 // Firefox (SM) gets 10% faster with am3/28 than with am4/26.
 
-setupEngine = function(fn, bits) {
+let setupEngine = function(fn, bits) {
   BigInteger.prototype.am = fn;
   dbits = bits;
 
@@ -1949,14 +1949,14 @@ RSAKey.prototype.decrypt = RSADecrypt;
 //RSAKey.prototype.b64_decrypt = RSAB64Decrypt;
 
 
-nValue="a5261939975948bb7a58dffe5ff54e65f0498f9175f5a09288810b8975871e99af3b5dd94057b0fc07535f5f97444504fa35169d461d0d30cf0192e307727c065168c788771c561a9400fb49175e9e6aa4e23fe11af69e9412dd23b0cb6684c4c2429bce139e848ab26d0829073351f4acd36074eafd036a5eb83359d2a698d3";
-eValue="10001";
-dValue="8e9912f6d3645894e8d38cb58c0db81ff516cf4c7e5a14c7f1eddb1459d2cded4d8d293fc97aee6aefb861859c8b6a3d1dfe710463e1f9ddc72048c09751971c4a580aa51eb523357a3cc48d31cfad1d4a165066ed92d4748fb6571211da5cb14bc11b6e2df7c1a559e6d5ac1cd5c94703a22891464fba23d0d965086277a161";
-pValue="d090ce58a92c75233a6486cb0a9209bf3583b64f540c76f5294bb97d285eed33aec220bde14b2417951178ac152ceab6da7090905b478195498b352048f15e7d";
-qValue="cab575dc652bb66df15a0359609d51d1db184750c00c6698b90ef3465c99655103edbf0d54c56aec0ce3c4d22592338092a126a0cc49f65a4a30d222b411e58f";
-dmp1Value="1a24bca8e273df2f0e47c199bbf678604e7df7215480c77c8db39f49b000ce2cf7500038acfff5433b7d582a01f1826e6f4d42e1c57f5e1fef7b12aabc59fd25";
-dmq1Value="3d06982efbbe47339e1f6d36b1216b8a741d410b0c662f54f7118b27b9a4ec9d914337eb39841d8666f3034408cf94f5b62f11c402fc994fe15a05493150d9fd";
-coeffValue="3a3e731acd8960b7ff9eb81a7ff93bd1cfa74cbd56987db58b4594fb09c09084db1734c8143f98b602b981aaa9243ca28deb69b5b280ee8dcee0fd2625e53250";
+let nValue="a5261939975948bb7a58dffe5ff54e65f0498f9175f5a09288810b8975871e99af3b5dd94057b0fc07535f5f97444504fa35169d461d0d30cf0192e307727c065168c788771c561a9400fb49175e9e6aa4e23fe11af69e9412dd23b0cb6684c4c2429bce139e848ab26d0829073351f4acd36074eafd036a5eb83359d2a698d3";
+let eValue="10001";
+let dValue="8e9912f6d3645894e8d38cb58c0db81ff516cf4c7e5a14c7f1eddb1459d2cded4d8d293fc97aee6aefb861859c8b6a3d1dfe710463e1f9ddc72048c09751971c4a580aa51eb523357a3cc48d31cfad1d4a165066ed92d4748fb6571211da5cb14bc11b6e2df7c1a559e6d5ac1cd5c94703a22891464fba23d0d965086277a161";
+let pValue="d090ce58a92c75233a6486cb0a9209bf3583b64f540c76f5294bb97d285eed33aec220bde14b2417951178ac152ceab6da7090905b478195498b352048f15e7d";
+let qValue="cab575dc652bb66df15a0359609d51d1db184750c00c6698b90ef3465c99655103edbf0d54c56aec0ce3c4d22592338092a126a0cc49f65a4a30d222b411e58f";
+let dmp1Value="1a24bca8e273df2f0e47c199bbf678604e7df7215480c77c8db39f49b000ce2cf7500038acfff5433b7d582a01f1826e6f4d42e1c57f5e1fef7b12aabc59fd25";
+let dmq1Value="3d06982efbbe47339e1f6d36b1216b8a741d410b0c662f54f7118b27b9a4ec9d914337eb39841d8666f3034408cf94f5b62f11c402fc994fe15a05493150d9fd";
+let coeffValue="3a3e731acd8960b7ff9eb81a7ff93bd1cfa74cbd56987db58b4594fb09c09084db1734c8143f98b602b981aaa9243ca28deb69b5b280ee8dcee0fd2625e53250";
 
 setupEngine(am3, 28);
 
@@ -3940,91 +3940,91 @@ function sc_Char(c) {
 sc_Char.lazy = new Object();
 // thanks to Eric
 sc_Char.char2readable = {
-    "\000": "#\\null",
-    "\007": "#\\bell",
-    "\010": "#\\backspace",
-    "\011": "#\\tab",
-    "\012": "#\\newline",
-    "\014": "#\\page",
-    "\015": "#\\return",
-    "\033": "#\\escape",
-    "\040": "#\\space",
-    "\177": "#\\delete",
+    "\x00": "#\\null",
+    "\x07": "#\\bell",
+    "\x08": "#\\backspace",
+    "\x09": "#\\tab",
+    "\x0a": "#\\newline",
+    "\x0c": "#\\page",
+    "\x0d": "#\\return",
+    "\x1b": "#\\escape",
+    "\x20": "#\\space",
+    "\x7f": "#\\delete",
 
   /* poeticless names */
-    "\001": "#\\soh",
-    "\002": "#\\stx",
-    "\003": "#\\etx",
-    "\004": "#\\eot",
-    "\005": "#\\enq",
-    "\006": "#\\ack",
+    "\x01": "#\\soh",
+    "\x02": "#\\stx",
+    "\x03": "#\\etx",
+    "\x04": "#\\eot",
+    "\x05": "#\\enq",
+    "\x06": "#\\ack",
 
-    "\013": "#\\vt",
-    "\016": "#\\so",
-    "\017": "#\\si",
+    "\x0b": "#\\vt",
+    "\x0e": "#\\so",
+    "\x0f": "#\\si",
 
-    "\020": "#\\dle",
-    "\021": "#\\dc1",
-    "\022": "#\\dc2",
-    "\023": "#\\dc3",
-    "\024": "#\\dc4",
-    "\025": "#\\nak",
-    "\026": "#\\syn",
-    "\027": "#\\etb",
+    "\x10": "#\\dle",
+    "\x11": "#\\dc1",
+    "\x12": "#\\dc2",
+    "\x13": "#\\dc3",
+    "\x14": "#\\dc4",
+    "\x15": "#\\nak",
+    "\x16": "#\\syn",
+    "\x17": "#\\etb",
 
-    "\030": "#\\can",
-    "\031": "#\\em",
-    "\032": "#\\sub",
-    "\033": "#\\esc",
-    "\034": "#\\fs",
-    "\035": "#\\gs",
-    "\036": "#\\rs",
-    "\037": "#\\us"};
+    "\x18": "#\\can",
+    "\x19": "#\\em",
+    "\x1a": "#\\sub",
+    "\x1b": "#\\esc",
+    "\x1c": "#\\fs",
+    "\x1d": "#\\gs",
+    "\x1e": "#\\rs",
+    "\x1f": "#\\us"};
 
 sc_Char.readable2char = {
-    "null": "\000",
-    "bell": "\007",
-    "backspace": "\010",
-    "tab": "\011",
-    "newline": "\012",
-    "page": "\014",
-    "return": "\015",
-    "escape": "\033",
-    "space": "\040",
-    "delete": "\000",
-    "soh": "\001",
-    "stx": "\002",
-    "etx": "\003",
-    "eot": "\004",
-    "enq": "\005",
-    "ack": "\006",
-    "bel": "\007",
-    "bs": "\010",
-    "ht": "\011",
-    "nl": "\012",
-    "vt": "\013",
-    "np": "\014",
-    "cr": "\015",
-    "so": "\016",
-    "si": "\017",
-    "dle": "\020",
-    "dc1": "\021",
-    "dc2": "\022",
-    "dc3": "\023",
-    "dc4": "\024",
-    "nak": "\025",
-    "syn": "\026",
-    "etb": "\027",
-    "can": "\030",
-    "em": "\031",
-    "sub": "\032",
-    "esc": "\033",
-    "fs": "\034",
-    "gs": "\035",
-    "rs": "\036",
-    "us": "\037",
-    "sp": "\040",
-    "del": "\177"};
+    "null": "\x00",
+    "bell": "\x07",
+    "backspace": "\x08",
+    "tab": "\x09",
+    "newline": "\x0a",
+    "page": "\x0c",
+    "return": "\x0d",
+    "escape": "\x1b",
+    "space": "\x20",
+    "delete": "\x00",
+    "soh": "\x01",
+    "stx": "\x02",
+    "etx": "\x03",
+    "eot": "\x04",
+    "enq": "\x05",
+    "ack": "\x06",
+    "bel": "\x07",
+    "bs": "\x08",
+    "ht": "\x09",
+    "nl": "\x0a",
+    "vt": "\x0b",
+    "np": "\x0c",
+    "cr": "\x0d",
+    "so": "\x0e",
+    "si": "\x0f",
+    "dle": "\x10",
+    "dc1": "\x11",
+    "dc2": "\x12",
+    "dc3": "\x13",
+    "dc4": "\x14",
+    "nak": "\x15",
+    "syn": "\x16",
+    "etb": "\x17",
+    "can": "\x18",
+    "em": "\x19",
+    "sub": "\x1a",
+    "esc": "\x1b",
+    "fs": "\x1c",
+    "gs": "\x1d",
+    "rs": "\x1e",
+    "us": "\x1f",
+    "sp": "\x20",
+    "del": "\x7f"};
 
 sc_Char.prototype.toString = function() {
     return this.val;
@@ -7536,7 +7536,7 @@ SC_ERROR_OUT = SC_DEFAULT_OUT;
 
 function RunBenchmark(name, count, run, warn) {
   for (var n = 0; n < count; ++n) {
-    result = run();
+    let result = run();
     if (!warn(result)) {
       throw new Error("Earley or Boyer did incorrect number of rewrites");
     }

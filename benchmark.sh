@@ -17,7 +17,7 @@ function benchmark_docker_nodejs {
     local image_name=$FUNCNAME
     local logfile="$LOGDIR/$image_name"
     rm -f "$logfile"
-    docker build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
+    docker buildx build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
     for i in $(seq 1 $COUNT); do
         time docker run --rm "$image_name" >&/dev/null
     done 2>"$logfile"
@@ -28,7 +28,7 @@ function benchmark_quark_nodejs {
     local image_name=$FUNCNAME
     local logfile="$LOGDIR/$image_name"
     rm -f "$logfile"
-    docker build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
+    docker buildx build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
     for i in $(seq 1 $COUNT); do
         time docker run --rm --runtime quark "$image_name" >&/dev/null
     done 2>"$logfile"
@@ -39,9 +39,23 @@ function benchmark_gvisor_nodejs {
     local image_name=$FUNCNAME
     local logfile="$LOGDIR/$image_name"
     rm -f "$logfile"
-    docker build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
+    docker buildx build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
     for i in $(seq 1 $COUNT); do
         time docker run --rm --runtime runsc "$image_name" >&/dev/null
+    done 2>"$logfile"
+    docker rmi "$image_name" >&/dev/null
+}
+
+function benchmark_docker_quickjs {
+    local image_name=$FUNCNAME
+    local logfile="$LOGDIR/$image_name"
+    rm -f "$logfile"
+    docker buildx build --platform=wasi/wasm -t "$image_name" -f docker/quickjs.Dockerfile . >&/dev/null
+    for i in $(seq 1 $COUNT); do
+        time docker run --rm \
+            --runtime io.containerd.wasmedge.v1 \
+            --platform wasi/wasm \
+            "$image_name" >&/dev/null
     done 2>"$logfile"
     docker rmi "$image_name" >&/dev/null
 }
@@ -63,8 +77,10 @@ mkdir -p "$LOGDIR"
 benchmark_docker_nodejs
 benchmark_quark_nodejs
 benchmark_gvisor_nodejs
+benchmark_docker_quickjs
 
 echo -e "name\t\t\tmin\tmax\tavg\tsd"
 show_result benchmark_docker_nodejs
 show_result benchmark_quark_nodejs
 show_result benchmark_gvisor_nodejs
+show_result benchmark_docker_quickjs
