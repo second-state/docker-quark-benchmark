@@ -2,6 +2,7 @@
 
 - Install [Quark][] and [gVisor][].
 - Install [Docker buildx plugin][buildx]
+- Build and install [second-state/runwasi][runwasi]
 - Use [wasmedge branch of moby](https://github.com/CaptainVincent/moby/tree/wasmedge) for dockerd
 - Start `dockerd` with `quark` and `runsc` runtime and `config/daemon.json` config:
 
@@ -30,11 +31,19 @@ docker context use benchmark
 - Results (sec, lower is better):
 
 ```
-name                            min     max     avg     sd
-benchmark_runc_nodejs           20.871  21.470  20.999  0.165
-benchmark_quark_nodejs          21.388  21.483  21.427  0.028
-benchmark_gvisor_nodejs         21.428  21.599  21.530  0.062
-benchmark_wasmedge_quickjs      55.509  60.114  56.550  1.240
+### container_start_time
+benchmark_name                     min     max     avg     std
+benchmark_runc_nodejs            0.416   0.509   0.473   0.029
+benchmark_quark_nodejs           0.595   0.784   0.658   0.052
+benchmark_gvisor_nodejs          0.752   0.865   0.808   0.033
+benchmark_wasmedge_quickjs       0.343   0.465   0.408   0.037
+
+### container_execution_time
+benchmark_name                     min     max     avg     std
+benchmark_runc_nodejs           20.457  20.505  20.481   0.018
+benchmark_quark_nodejs          20.763  20.866  20.790   0.033
+benchmark_gvisor_nodejs         20.644  20.845  20.756   0.056
+benchmark_wasmedge_quickjs      54.324  58.383  55.724   1.460
 ```
 
 ## Environments
