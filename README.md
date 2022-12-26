@@ -1,9 +1,14 @@
 ## Usage
 
-- Install [Quark][] and [gVisor][].
+- Install [Quark][]
+    - Use [commit b0dd795298c5804a0e323c6956d3149ce4a6c5e1](https://github.com/QuarkContainer/Quark/commit/92d1cb74ff6dbde184160e0bb400a7153a6f9e00)
+- Install [gVisor][].
+    - Use [commit f054c314ec020f0b26266f267221033ffda82b67](https://github.com/google/gvisor/commit/f054c314ec020f0b26266f267221033ffda82b67)
 - Install [Docker buildx plugin][buildx]
 - Build and install [second-state/runwasi][runwasi]
+    - Use [commit ba7ea907f8593ef677d46aee7edc0ff8e3cd4be8](https://github.com/second-state/runwasi/commit/ba7ea907f8593ef677d46aee7edc0ff8e3cd4be8)
 - Use [wasmedge branch of moby](https://github.com/CaptainVincent/moby/tree/wasmedge) for dockerd
+    - Use [commit 270211953ea4c3a88cae6eb566aa3a32d2d4b1ba](https://github.com/CaptainVincent/moby/commit/270211953ea4c3a88cae6eb566aa3a32d2d4b1ba)
 - Start `dockerd` with `quark` and `runsc` runtime and `config/daemon.json` config:
 
 ```
@@ -33,6 +38,8 @@ docker context use benchmark
         - We use `time` command to monitor time usage.
     - For memory measurement, the unit is MB (lower is better).
         - We use `docker stats` command to monitor memory usage.
+        - Since [runwasi][] does not support `docker stats` to get memory usage,
+          we did not list memory usage for `benchmark_wasmedge_quickjs` here.
 
 ```
 ### container_start_time
@@ -54,7 +61,6 @@ benchmark_name                      min      max      avg      std
 benchmark_runc_nodejs           341.400  369.200  352.990    8.389
 benchmark_quark_nodejs         1398.784 1446.912 1423.462   12.168
 benchmark_gvisor_nodejs         355.400  380.100  367.000    9.080
-benchmark_wasmedge_quickjs        0.000    0.000    0.000    0.000
 ```
 
 ## Environments
