@@ -28,22 +28,33 @@ docker context use benchmark
 ./benchmark.sh <COUNT>
 ```
 
-- Results (sec, lower is better):
+- Results
+    - For time measurement, the unit is sec (lower is better).
+        - We use `time` command to monitor time usage.
+    - For memory measurement, the unit is MB (lower is better).
+        - We use `docker stats` command to monitor memory usage.
 
 ```
 ### container_start_time
-benchmark_name                     min     max     avg     std
-benchmark_runc_nodejs            0.416   0.509   0.473   0.029
-benchmark_quark_nodejs           0.595   0.784   0.658   0.052
-benchmark_gvisor_nodejs          0.752   0.865   0.808   0.033
-benchmark_wasmedge_quickjs       0.343   0.465   0.408   0.037
+benchmark_name                      min      max      avg      std
+benchmark_runc_nodejs             0.419    0.454    0.436    0.011
+benchmark_quark_nodejs            0.572    0.626    0.606    0.016
+benchmark_gvisor_nodejs           0.671    0.759    0.707    0.027
+benchmark_wasmedge_quickjs        0.346    0.392    0.360    0.013
 
 ### container_execution_time
-benchmark_name                     min     max     avg     std
-benchmark_runc_nodejs           20.457  20.505  20.481   0.018
-benchmark_quark_nodejs          20.763  20.866  20.790   0.033
-benchmark_gvisor_nodejs         20.644  20.845  20.756   0.056
-benchmark_wasmedge_quickjs      54.324  58.383  55.724   1.460
+benchmark_name                      min      max      avg      std
+benchmark_runc_nodejs            20.422   20.856   20.504    0.128
+benchmark_quark_nodejs           20.701   20.804   20.753    0.032
+benchmark_gvisor_nodejs          20.590   20.800   20.658    0.061
+benchmark_wasmedge_quickjs       55.012   58.590   55.974    1.045
+
+### max_memory_usage
+benchmark_name                      min      max      avg      std
+benchmark_runc_nodejs           341.400  369.200  352.990    8.389
+benchmark_quark_nodejs         1398.784 1446.912 1423.462   12.168
+benchmark_gvisor_nodejs         355.400  380.100  367.000    9.080
+benchmark_wasmedge_quickjs        0.000    0.000    0.000    0.000
 ```
 
 ## Environments
