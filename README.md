@@ -1,9 +1,14 @@
 ## Usage
 
-- Install [Quark][] and [gVisor][].
+- Install [Quark][]
+    - Use [commit b0dd795298c5804a0e323c6956d3149ce4a6c5e1](https://github.com/QuarkContainer/Quark/commit/92d1cb74ff6dbde184160e0bb400a7153a6f9e00)
+- Install [gVisor][].
+    - Use [commit f054c314ec020f0b26266f267221033ffda82b67](https://github.com/google/gvisor/commit/f054c314ec020f0b26266f267221033ffda82b67)
 - Install [Docker buildx plugin][buildx]
 - Build and install [second-state/runwasi][runwasi]
+    - Use [commit ba7ea907f8593ef677d46aee7edc0ff8e3cd4be8](https://github.com/second-state/runwasi/commit/ba7ea907f8593ef677d46aee7edc0ff8e3cd4be8)
 - Use [wasmedge branch of moby](https://github.com/CaptainVincent/moby/tree/wasmedge) for dockerd
+    - Use [commit 270211953ea4c3a88cae6eb566aa3a32d2d4b1ba](https://github.com/CaptainVincent/moby/commit/270211953ea4c3a88cae6eb566aa3a32d2d4b1ba)
 - Start `dockerd` with `quark` and `runsc` runtime and `config/daemon.json` config:
 
 ```
@@ -28,22 +33,34 @@ docker context use benchmark
 ./benchmark.sh <COUNT>
 ```
 
-- Results (sec, lower is better):
+- Results
+    - For time measurement, the unit is sec (lower is better).
+        - We use `time` command to monitor time usage.
+    - For memory measurement, the unit is MB (lower is better).
+        - We use `docker stats` command to monitor memory usage.
+        - Since [runwasi][] does not support `docker stats` to get memory usage,
+          we did not list memory usage for `benchmark_wasmedge_quickjs` here.
 
 ```
 ### container_start_time
-benchmark_name                     min     max     avg     std
-benchmark_runc_nodejs            0.416   0.509   0.473   0.029
-benchmark_quark_nodejs           0.595   0.784   0.658   0.052
-benchmark_gvisor_nodejs          0.752   0.865   0.808   0.033
-benchmark_wasmedge_quickjs       0.343   0.465   0.408   0.037
+benchmark_name                      min      max      avg      std
+benchmark_runc_nodejs             0.419    0.454    0.436    0.011
+benchmark_quark_nodejs            0.572    0.626    0.606    0.016
+benchmark_gvisor_nodejs           0.671    0.759    0.707    0.027
+benchmark_wasmedge_quickjs        0.346    0.392    0.360    0.013
 
 ### container_execution_time
-benchmark_name                     min     max     avg     std
-benchmark_runc_nodejs           20.457  20.505  20.481   0.018
-benchmark_quark_nodejs          20.763  20.866  20.790   0.033
-benchmark_gvisor_nodejs         20.644  20.845  20.756   0.056
-benchmark_wasmedge_quickjs      54.324  58.383  55.724   1.460
+benchmark_name                      min      max      avg      std
+benchmark_runc_nodejs            20.422   20.856   20.504    0.128
+benchmark_quark_nodejs           20.701   20.804   20.753    0.032
+benchmark_gvisor_nodejs          20.590   20.800   20.658    0.061
+benchmark_wasmedge_quickjs       55.012   58.590   55.974    1.045
+
+### max_memory_usage
+benchmark_name                      min      max      avg      std
+benchmark_runc_nodejs           341.400  369.200  352.990    8.389
+benchmark_quark_nodejs         1398.784 1446.912 1423.462   12.168
+benchmark_gvisor_nodejs         355.400  380.100  367.000    9.080
 ```
 
 ## Environments

@@ -4,6 +4,8 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+
 COUNT=10
 TIMEFORMAT=%R
 LOGDIR=./log
@@ -14,8 +16,10 @@ function benchmark_runc_nodejs {
     rm -f "$logfile"
     docker buildx build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
     for i in $(seq 1 $COUNT); do
+        container_name="${image_name}-container"
+        ./utils/monitor.sh "$container_name"&
         date +"start: %s.%3N"
-        docker run --rm "$image_name"
+        docker run --rm --name "$container_name" "$image_name"
         date +"end: %s.%3N"
     done >"$logfile" 2>&1
     docker rmi "$image_name" >&/dev/null
@@ -27,8 +31,10 @@ function benchmark_quark_nodejs {
     rm -f "$logfile"
     docker buildx build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
     for i in $(seq 1 $COUNT); do
+        container_name="${image_name}-container"
+        ./utils/monitor.sh "$container_name"&
         date +"start: %s.%3N"
-        docker run --rm --runtime quark "$image_name"
+        docker run --rm --name "$container_name" --runtime quark "$image_name"
         date +"end: %s.%3N"
     done >"$logfile" 2>&1
     docker rmi "$image_name" >&/dev/null
@@ -40,8 +46,10 @@ function benchmark_gvisor_nodejs {
     rm -f "$logfile"
     docker buildx build -t "$image_name" -f docker/nodejs.Dockerfile . >&/dev/null
     for i in $(seq 1 $COUNT); do
+        container_name="${image_name}-container"
+        ./utils/monitor.sh "$container_name"&
         date +"start: %s.%3N"
-        docker run --rm --runtime runsc "$image_name"
+        docker run --rm --name "$container_name" --runtime runsc "$image_name"
         date +"end: %s.%3N"
     done >"$logfile" 2>&1
     docker rmi "$image_name" >&/dev/null
@@ -53,8 +61,11 @@ function benchmark_wasmedge_quickjs {
     rm -f "$logfile"
     docker buildx build --platform=wasi/wasm -t "$image_name" -f docker/quickjs.Dockerfile . >&/dev/null
     for i in $(seq 1 $COUNT); do
+        container_name="${image_name}-container"
+        ./utils/monitor.sh "$container_name"&
         date +"start: %s.%3N"
         docker run --rm \
+            --name "$container_name" \
             --runtime io.containerd.wasmedge.v1 \
             --platform wasi/wasm \
             "$image_name"
